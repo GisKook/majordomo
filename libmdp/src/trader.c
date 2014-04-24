@@ -11,11 +11,13 @@ int main (int argc, char *argv [])
     mdp_client_t *client = mdp_client_new ("tcp://localhost:5555", verbose);
 
     //  Send 100 sell orders
+	char buffer[16]={0};
     int count;
     for (count = 0; count < 5; count++) {
         zmsg_t *request = zmsg_new ();
         zmsg_pushstr (request, "8");                // volume
-        zmsg_pushstr (request, "%d", count + 1000); // price
+		sprintf(buffer, "%d", count+1000);
+        zmsg_pushstr (request, buffer);
         zmsg_pushstr (request, "SELL");
         mdp_client_send (client, "NYSE", &request);
     }
